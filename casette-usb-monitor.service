@@ -1,0 +1,33 @@
+[Unit]
+Description=Casette USB Monitor Service
+Documentation=https://github.com/casette-usb-monitor
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+User=Adam
+Group=Adam
+ExecStart=/home/Adam/repos/casette/venv/bin/python /home/Adam/repos/casette/scripts/usb_monitor.py
+ExecStop=/home/Adam/repos/casette/scripts/mount_helper.sh cleanup
+Restart=always
+RestartSec=10
+
+# Environment variables
+Environment="DISPLAY=:0"
+Environment="HOME=/home/Adam"
+Environment="XDG_RUNTIME_DIR=/run/user/1000"
+
+# Security settings
+NoNewPrivileges=false
+PrivateTmp=true
+
+# Working directory
+WorkingDirectory=/home/Adam/repos/casette
+
+# Logging
+StandardOutput=append:/home/Adam/repos/casette/logs/service.log
+StandardError=append:/home/Adam/repos/casette/logs/service.log
+
+[Install]
+WantedBy=graphical-session.target
